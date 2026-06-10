@@ -17,6 +17,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build APK
+        env:
+          BUILDOZER_WARN_ON_ROOT: 0
         run: |
           buildozer android debug
 
