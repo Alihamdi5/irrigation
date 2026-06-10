@@ -2,26 +2,31 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch: # This allows you to trigger the build manually from the Actions tab
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build with Buildozer
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build APK
         uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
         with:
           command: buildozer android debug
-          buildozer_version: master
 
-      - name: Upload APK Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: irrigation-app
-          path: ${{ steps.buildozer.outputs.filename }}
+          name: android-apk
+          path: bin/*.apk
