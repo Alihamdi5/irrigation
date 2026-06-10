@@ -10,15 +10,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    container:
+      image: ghcr.io/kivy/buildozer:latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build APK with Buildozer
-        uses: ArtemGovorov/buildozer-action@v1
-        with:
-          command: buildozer android debug
-          repository_root: .
+      - name: Build APK
+        env:
+          BUILDOZER_WARN_ON_ROOT: 0
+        run: |
+          yes | buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
